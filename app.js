@@ -11,12 +11,32 @@ let pokeHeight = document.querySelector('.poke-height')
 let pokeListItems = document.querySelectorAll('.list-item')
 let prevButton = document.querySelector('.left-button');
 let nextButton = document.querySelector('.right-button');
-let typeArray = ['normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bug', 'ghost', 'steel', 'fire', 'water', 'grass', 'electric', 'psychic', 'ice', 'dragon', 'dark', 'fairy']
 
+//Constants and Helper FUnctions
+const typeArray = [  
+    'normal', 
+    'fighting', 
+    'flying', 
+    'poison', 
+    'ground', 
+    'rock', 
+    'bug', 
+    'ghost', 
+    'steel', 
+    'fire', 
+    'water', 
+    'grass', 
+    'electric', 
+    'psychic', 
+    'ice', 
+    'dragon', 
+    'dark', 
+    'fairy'
+]
 let prevUrl = null;
 let nextUrl = null;
-// let currentPokemon = 'https://pokeapi.co/api/v2/pokemon/1'
 let currentPokemon = null;
+
 let capitalize = (string) => {
     return string[0].toUpperCase() + string.slice(1);
 }
@@ -45,7 +65,6 @@ let displayPokemon = (url) => {
             pokeTypeTwo.textContent = '';
         };
         mainScreen.classList.add(firstType.type.name)
-        // pokeTypeTwo.textContent = 'test'
         pokeName.textContent = capitalize(name)
         pokeId.textContent = '#' + id.toString().padStart(3, '0');
         pokeWeight.textContent = weight;
@@ -68,15 +87,13 @@ let fetchData = (url) => {
                 let linkArray = url.split('/');
                 let pokemonNum = linkArray[6]
                 pokeListItem.textContent = pokemonNum + '.' + ' ' + capitalize(name);
-                // pokeListItem.addEventListener('click', () => changePokemon(pokemonNum))
             } else {
                 pokeListItem.textContent = ''
             }
         }
     }))
 }
-fetchData('http://pokeapi.co/api/v2/pokemon?offset=0&limit=20');
-displayPokemon(currentPokemon)
+
 
 let handlePrevious = () => {
     if(!prevUrl) return;
@@ -87,16 +104,14 @@ let handleNext = () => {
     fetchData(nextUrl)
 
 }
-
 let changePokemon = (e) => {
-    if(!e.target.textContent) return;
+    if (!e.target.textContent) return;
     let id = e.target.textContent.split('.')[0];
-    if(!id) return;
+    if (!id) return;
     displayPokemon('https://pokeapi.co/api/v2/pokemon/' + id)
-
-
 }
-
+fetchData('http://pokeapi.co/api/v2/pokemon?offset=0&limit=20');
+displayPokemon(currentPokemon)
 prevButton.addEventListener('click', handlePrevious);
 nextButton.addEventListener('click', handleNext);
 for(let div of pokeListItems){
