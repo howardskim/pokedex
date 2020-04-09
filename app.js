@@ -15,7 +15,8 @@ let typeArray = ['normal', 'fighting', 'flying', 'poison', 'ground', 'rock', 'bu
 
 let prevUrl = null;
 let nextUrl = null;
-let currentPokemon = 'https://pokeapi.co/api/v2/pokemon/1'
+// let currentPokemon = 'https://pokeapi.co/api/v2/pokemon/1'
+let currentPokemon = null;
 let capitalize = (string) => {
     return string[0].toUpperCase() + string.slice(1);
 }
@@ -29,6 +30,7 @@ let resetScreen = () => {
 
 
 let displayPokemon = (url) => {
+    if(!url) return;
     fetch(url).then(res => res.json().then((data) => {
         resetScreen();
         let { height, id, name, order, weight, types, stats, sprites, forms, abilities } = data;
@@ -53,10 +55,6 @@ let displayPokemon = (url) => {
     }));
 }
 
-let changePokemon = (id) => {
-    displayPokemon('https://pokeapi.co/api/v2/pokemon/' + id)
-}
-
 let fetchData = (url) => {
     fetch(url).then(res => res.json().then((data) => {
         let { results, next, previous } = data;
@@ -70,7 +68,7 @@ let fetchData = (url) => {
                 let linkArray = url.split('/');
                 let pokemonNum = linkArray[6]
                 pokeListItem.textContent = pokemonNum + '.' + ' ' + capitalize(name);
-                pokeListItem.addEventListener('click', () => changePokemon(pokemonNum))
+                // pokeListItem.addEventListener('click', () => changePokemon(pokemonNum))
             } else {
                 pokeListItem.textContent = ''
             }
@@ -90,6 +88,17 @@ let handleNext = () => {
 
 }
 
+let changePokemon = (e) => {
+    if(!e.target.textContent) return;
+    let id = e.target.textContent.split('.')[0];
+    if(!id) return;
+    displayPokemon('https://pokeapi.co/api/v2/pokemon/' + id)
+
+
+}
 
 prevButton.addEventListener('click', handlePrevious);
-nextButton.addEventListener('click', handleNext)
+nextButton.addEventListener('click', handleNext);
+for(let div of pokeListItems){
+    div.addEventListener('click', changePokemon)
+}
